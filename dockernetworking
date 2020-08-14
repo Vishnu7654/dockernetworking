@@ -1,0 +1,87 @@
+CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS              PORTS               NAMES
+b447b0bf83b3        alpine              "/bin/sh"           23 seconds ago       Up 19 seconds                           dell
+3003f4ef8435        alpine              "/bin/sh"           About a minute ago   Up About a minute                       hp
+root@vishnu-VirtualBox:~# docker network inspect f786024955b5 
+[
+    {
+        "Name": "bridge",
+        "Id": "f786024955b5c81589e61e1b424482230cd2d0c07a60c07b49bf1608090fc8ae",
+        "Created": "2020-08-14T16:13:57.349708301+05:30",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "3003f4ef8435341f73a5836e8b47f81f805fe7c2bec9c2f7d9ebe63d944781ee": {
+                "Name": "hp",
+                "EndpointID": "7a1ab88d57c82c78f7a274f6f3809173389bda6a3e90533351493c3002092535",
+                "MacAddress": "02:42:ac:11:00:02",
+                "IPv4Address": "172.17.0.2/16",
+                "IPv6Address": ""
+            },
+            "b447b0bf83b3a85e2cd1308954016a72d0cbe20234029223c9ed200862514481": {
+                "Name": "dell",
+                "EndpointID": "8119c1f987664ae2408cb24bcc01056ba2e45c2e414cb03f6a59edaef4a5f9f2",
+                "MacAddress": "02:42:ac:11:00:03",
+                "IPv4Address": "172.17.0.3/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+root@vishnu-VirtualBox:~# docker attach hp
+/ # ping 172.17.0.3
+PING 172.17.0.3 (172.17.0.3): 56 data bytes
+64 bytes from 172.17.0.3: seq=0 ttl=64 time=0.664 ms
+64 bytes from 172.17.0.3: seq=1 ttl=64 time=0.899 ms
+64 bytes from 172.17.0.3: seq=2 ttl=64 time=0.322 ms
+64 bytes from 172.17.0.3: seq=3 ttl=64 time=0.592 ms
+64 bytes from 172.17.0.3: seq=4 ttl=64 time=0.252 ms
+64 bytes from 172.17.0.3: seq=5 ttl=64 time=0.260 ms
+64 bytes from 172.17.0.3: seq=6 ttl=64 time=0.673 ms
+64 bytes from 172.17.0.3: seq=7 ttl=64 time=0.702 ms
+64 bytes from 172.17.0.3: seq=8 ttl=64 time=0.799 ms
+64 bytes from 172.17.0.3: seq=9 ttl=64 time=0.824 ms
+64 bytes from 172.17.0.3: seq=10 ttl=64 time=0.671 ms
+64 bytes from 172.17.0.3: seq=11 ttl=64 time=0.735 ms
+64 bytes from 172.17.0.3: seq=12 ttl=64 time=0.598 ms
+64 bytes from 172.17.0.3: seq=13 ttl=64 time=0.765 ms
+64 bytes from 172.17.0.3: seq=14 ttl=64 time=0.576 ms
+64 bytes from 172.17.0.3: seq=15 ttl=64 time=0.839 ms
+64 bytes from 172.17.0.3: seq=16 ttl=64 time=0.269 ms
+64 bytes from 172.17.0.3: seq=17 ttl=64 time=0.281 ms
+64 bytes from 172.17.0.3: seq=18 ttl=64 time=0.876 ms
+64 bytes from 172.17.0.3: seq=19 ttl=64 time=1.430 ms
+64 bytes from 172.17.0.3: seq=20 ttl=64 time=0.956 ms
+64 bytes from 172.17.0.3: seq=21 ttl=64 time=0.719 ms
+64 bytes from 172.17.0.3: seq=22 ttl=64 time=0.244 ms
+64 bytes from 172.17.0.3: seq=23 ttl=64 time=0.679 ms
+64 bytes from 172.17.0.3: seq=24 ttl=64 time=0.237 ms
+64 bytes from 172.17.0.3: seq=25 ttl=64 time=0.721 ms
+64 bytes from 172.17.0.3: seq=26 ttl=64 time=0.241 ms
+64 bytes from 172.17.0.3: seq=27 ttl=64 time=0.667 ms

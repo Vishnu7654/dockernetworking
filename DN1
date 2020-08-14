@@ -1,0 +1,92 @@
+root@vishnu-VirtualBox:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+f786024955b5        bridge              bridge              local
+0696fd309556        docker_network      bridge              local
+0c07809ece82        host                host                local
+e2f9e4f81b78        none                null                local
+root@vishnu-VirtualBox:~# docker network create -d bridge dockernetworking1
+0f23e222d240c5bc35e72fdf5eab3684595462e80ca148aa7a5219580be3204f
+root@vishnu-VirtualBox:~# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+b447b0bf83b3        alpine              "/bin/sh"           32 minutes ago      Up 32 minutes                           dell
+root@vishnu-VirtualBox:~# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+f786024955b5        bridge              bridge              local
+0696fd309556        docker_network      bridge              local
+0f23e222d240        dockernetworking1   bridge              local
+0c07809ece82        host                host                local
+e2f9e4f81b78        none                null                local
+root@vishnu-VirtualBox:~# docker run -itd --name=acer dockernetworking1
+Unable to find image 'dockernetworking1:latest' locally
+docker: Error response from daemon: pull access denied for dockernetworking1, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+See 'docker run --help'.
+root@vishnu-VirtualBox:~# docker run -itd --name=acer --network=dockernetworking1 alpine
+e8613ea4ee03c332954909e8631683e1432de8c78836b547410f0528918eda9b
+root@vishnu-VirtualBox:~# docker ls
+docker: 'ls' is not a docker command.
+See 'docker --help'
+root@vishnu-VirtualBox:~# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+e8613ea4ee03        alpine              "/bin/sh"           42 seconds ago      Up 33 seconds                           acer
+b447b0bf83b3        alpine              "/bin/sh"           38 minutes ago      Up 38 minutes                           dell
+root@vishnu-VirtualBox:~# docker run -itd --name=hp1 --network=dockernetworking1 alpine
+70443ef4da03ba6aae729368ca1b9a85d7f8c26127704c339be86d8d749a44d4
+root@vishnu-VirtualBox:~# docker network inspect 0f23e222d240  
+[
+    {
+        "Name": "dockernetworking1",
+        "Id": "0f23e222d240c5bc35e72fdf5eab3684595462e80ca148aa7a5219580be3204f",
+        "Created": "2020-08-14T17:00:44.319796859+05:30",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.19.0.0/16",
+                    "Gateway": "172.19.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "70443ef4da03ba6aae729368ca1b9a85d7f8c26127704c339be86d8d749a44d4": {
+                "Name": "hp1",
+                "EndpointID": "67f43335c026944faa11dde6453166fb1a1cd3912b601ec0bb015846144c526a",
+                "MacAddress": "02:42:ac:13:00:03",
+                "IPv4Address": "172.19.0.3/16",
+                "IPv6Address": ""
+            },
+            "e8613ea4ee03c332954909e8631683e1432de8c78836b547410f0528918eda9b": {
+                "Name": "acer",
+                "EndpointID": "0e41377c1005f31a5d2a348d404e3ad089ae45c6d99a369ad40e1a2bdaa7a9fc",
+                "MacAddress": "02:42:ac:13:00:02",
+                "IPv4Address": "172.19.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+root@vishnu-VirtualBox:~# docker attach hp1
+/ # ping 172.19.0.2
+PING 172.19.0.2 (172.19.0.2): 56 data bytes
+64 bytes from 172.19.0.2: seq=0 ttl=64 time=0.864 ms
+64 bytes from 172.19.0.2: seq=1 ttl=64 time=1.921 ms
+64 bytes from 172.19.0.2: seq=2 ttl=64 time=1.559 ms
+64 bytes from 172.19.0.2: seq=3 ttl=64 time=3.920 ms
+^C
+--- 172.19.0.2 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.864/2.066/3.920 ms
+/ # exit
+
